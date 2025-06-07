@@ -1,0 +1,41 @@
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local remoteEvent = ReplicatedStorage:WaitForChild("RemoteEvent")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Create GUI
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "SoundGui"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = playerGui
+
+-- Create Button
+local button = Instance.new("TextButton")
+button.Name = "PlayButton"
+button.Text = "Play Sound"
+button.Size = UDim2.new(0, 200, 0, 50)
+button.Position = UDim2.new(0.5, -100, 0.9, -25)
+button.BackgroundColor3 = Color3.fromRGB(50, 150, 255)
+button.TextColor3 = Color3.new(1, 1, 1)
+button.Font = Enum.Font.SourceSansBold
+button.TextSize = 24
+button.Parent = screenGui
+
+-- Handle Click
+button.MouseButton1Click:Connect(function()
+	remoteEvent:FireServer()
+end)
+
+-- Create Sound
+local sound = Instance.new("Sound")
+sound.Name = "PlayOnceSound"
+sound.SoundId = "rbxassetid://103989374476757" -- Replace with your sound ID
+sound.Looped = false
+sound.Volume = 1
+sound.Parent = workspace
+
+-- Play Sound When Told By Server
+remoteEvent.OnClientEvent:Connect(function()
+	sound:Play()
+end)
